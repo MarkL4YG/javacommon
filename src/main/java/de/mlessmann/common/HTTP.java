@@ -1,9 +1,11 @@
 package de.mlessmann.common;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import de.mlessmann.common.annotations.Nullable;
+
+import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.Proxy;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -30,5 +32,36 @@ public class HTTP {
         return file.exists() && file.isFile();
 
     }
+
+    public static String GET(String sUrl, @Nullable Proxy proxy) throws MalformedURLException, IOException {
+
+        StringBuilder result = new StringBuilder();
+
+        URL url = new URL(sUrl);
+
+        HttpURLConnection connection;
+
+        if (proxy != null)
+            connection = (HttpURLConnection) url.openConnection(proxy);
+        else
+            connection = (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("GET");
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+        String ln;
+        while ((ln = reader.readLine()) != null) {
+            result.append(ln);
+            if (!ln.endsWith("\n"))
+                result.append( "\n");
+        }
+
+        reader.close();
+
+        return result.toString();
+
+    }
+
 
 }
