@@ -17,6 +17,9 @@ public class HTTP {
 
     public static boolean GETFILE(String sUrl, File file) throws MalformedURLException, IOException {
 
+        if (file.exists())
+            file.delete();
+
         URL u = new URL(sUrl);
 
         ReadableByteChannel channel = Channels.newChannel(u.openStream());

@@ -10,26 +10,8 @@ public class Common {
 
     public static int negateInt(int i) { return i * (-1); }
 
-    public static String getFirstVersion(String s) {
-
-        String pString1 = "[v][0-9]";
-
-        Pattern p1 = Pattern.compile(pString1);
-
-        Matcher m1 = p1.matcher(s);
-
-        int start = 1;
-
-        if (m1.find()) start = m1.start();
-
-        String pString2 = "(0-9)([.+?]/s)";
-
-        int end = s.indexOf(" ", start  + 1);
-
-        if (end == -1) end = s.length();
-
-        return s.substring(start == -1 ? 0 : start + 1, end);
-
+    public static String stripVersion(String s) {
+        return s.replaceAll("(?!\\.)([a-zA-Z. ]*)", "");
     }
 
     /**
