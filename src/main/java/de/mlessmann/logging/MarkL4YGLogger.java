@@ -42,4 +42,9 @@ public class MarkL4YGLogger {
         return this;
     }
 
+    public MarkL4YGLogger setLogTrace(boolean debug) {
+        logFormatter.setDebug(debug);
+        return this;
+    }
+
 }
