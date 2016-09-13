@@ -22,6 +22,9 @@ public class Common {
      */
     public static int compareVersions(String a, String b) {
 
+        a = stripVersion(a);
+        b = stripVersion(b);
+
         String[] first = a.split(Pattern.quote("."));
         String[] second = b.split(Pattern.quote("."));
 
