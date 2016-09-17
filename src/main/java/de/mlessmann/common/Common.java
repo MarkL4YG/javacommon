@@ -1,6 +1,5 @@
 package de.mlessmann.common;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -61,9 +60,37 @@ public class Common {
             }
 
         }
-
         return 0;
+    }
 
+    public static boolean areCompatible(String a, String b) {
+        a = stripVersion(a);
+        b = stripVersion(b);
+
+        String[] first = a.split(Pattern.quote("."));
+        String[] second = b.split(Pattern.quote("."));
+        int max = (int) Math.ceil(((first.length - 1) + (second.length - 1)) / 2);
+        for (int i = max; i >= 0; i--) {
+            int c = 0, d = 0;
+            if (first.length >= i) {
+                c = Integer.parseInt(first[i]);
+            }
+
+            if (second.length >= i) {
+                d = Integer.parseInt(second[i]);
+            }
+            //First higher than second
+            if (c > d) {
+                if (max - i > 0)
+                    return false;
+            }
+            //Second higher than first
+            if (d > c) {
+                if (max - i > 0)
+                    return false;
+            }
+        }
+        return true;
     }
 
 }
