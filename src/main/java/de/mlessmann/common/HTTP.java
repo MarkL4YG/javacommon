@@ -19,6 +19,7 @@ public class HTTP {
 
         if (file.exists())
             file.delete();
+        file.getParentFile().mkdirs();
 
         URL u = new URL(sUrl);
 
