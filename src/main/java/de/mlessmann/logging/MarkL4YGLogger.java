@@ -24,6 +24,9 @@ public class MarkL4YGLogger {
         stdHandler.setFormatter(logFormatter);
         errHandler = new MarkL4YGConsoleHandler(System.err);
         errHandler.setFormatter(logFormatter);
+
+        logger.addHandler(stdHandler);
+        logger.addHandler(errHandler);
     }
 
     public Logger getLogger() {
