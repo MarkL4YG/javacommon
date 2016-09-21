@@ -16,6 +16,6 @@ public @interface API {
     int APILevel() default 1;
 
     public static int APIVERSION = 1;
-    public static String PROTOVERSION = "1.1.0.0";
+    public static String PROTOVERSION = "1.1.0.1";
 
 }
