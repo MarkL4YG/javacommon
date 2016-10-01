@@ -1,5 +1,8 @@
 package de.mlessmann.common;
 
+import de.mlessmann.common.annotations.Nullable;
+
+import java.io.*;
 import java.util.regex.Pattern;
 
 /**
@@ -20,7 +23,6 @@ public class Common {
      * 1 b is higher
      */
     public static int compareVersions(String a, String b) {
-
         a = stripVersion(a);
         b = stripVersion(b);
 
@@ -34,29 +36,21 @@ public class Common {
             int c = 0, d = 0;
 
             if (first.length >= i) {
-
                 c = Integer.parseInt(first[i]);
-
             }
 
             if (second.length >= i) {
-
                 d = Integer.parseInt(second[i]);
-
             }
 
             //First higher than second
             if (c > d) {
-
                 return - 1;
-
             }
 
             //Second higher than first
             if (d > c) {
-
                 return 1;
-
             }
 
         }
@@ -91,6 +85,20 @@ public class Common {
             }
         }
         return true;
+    }
+
+    public static void copyStream(InputStream i, OutputStream o, @Nullable Integer bufferSize) throws IOException {
+        byte[] buffer = new byte[bufferSize == null ? 1024 : bufferSize];
+        int bytesRead;
+        while ((bytesRead = i.read(buffer)) != -1) {
+            o.write(buffer, 0, bytesRead);
+        }
+    }
+
+    public static void copyFile(File f1, File f2) throws IOException {
+        FileInputStream in = new FileInputStream(f1);
+        FileOutputStream out = new FileOutputStream(f2);
+        copyStream(in, out, null);
     }
 
 }
