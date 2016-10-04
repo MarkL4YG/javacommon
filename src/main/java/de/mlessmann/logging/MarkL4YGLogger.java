@@ -1,6 +1,7 @@
 package de.mlessmann.logging;
 
-import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -8,6 +9,16 @@ import java.util.logging.Logger;
  * Created by Life4YourGames on 13.09.16.
  */
 public class MarkL4YGLogger {
+
+    private static Map<String, MarkL4YGLogger> loggerMap = new HashMap<String, MarkL4YGLogger>();
+
+    public synchronized static MarkL4YGLogger get(String loggerID) {
+        if (!loggerMap.containsKey(loggerID)) {
+            loggerMap.put(loggerID, new MarkL4YGLogger(loggerID));
+            return get(loggerID);
+        }
+        return loggerMap.get(loggerID);
+    }
 
     private Logger logger;
     private MarkL4YGConsoleHandler stdHandler;
@@ -48,6 +59,21 @@ public class MarkL4YGLogger {
     public MarkL4YGLogger setLogTrace(boolean debug) {
         logFormatter.setDebug(debug);
         return this;
+    }
+
+    public ILogReceiver getLogReceiver() {
+        return new ILogReceiver() {
+            @Override
+            public void onMessage(Object sender, Level level, String message) {
+                logger.log(level, sender.getClass().getSimpleName() + ' ' + message);
+            }
+
+            @Override
+            public void onException(Object sender, Level level, Exception exception) {
+                logger.log(level, sender.getClass().getSimpleName() + ' ' + exception.toString());
+                exception.printStackTrace();
+            }
+        };
     }
 
 }
