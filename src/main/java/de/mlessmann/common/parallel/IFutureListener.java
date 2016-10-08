@@ -5,5 +5,5 @@ package de.mlessmann.common.parallel;
  */
 public interface IFutureListener {
 
-    void onFutureAvailable(IFuture future);
+    void onFutureAvailable(IFuture<?> future);
 }
