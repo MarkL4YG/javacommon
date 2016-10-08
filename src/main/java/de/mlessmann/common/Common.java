@@ -2,7 +2,9 @@ package de.mlessmann.common;
 
 import de.mlessmann.common.annotations.Nullable;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.regex.Pattern;
 
 /**
@@ -94,11 +96,4 @@ public class Common {
             o.write(buffer, 0, bytesRead);
         }
     }
-
-    public static void copyFile(File f1, File f2) throws IOException {
-        FileInputStream in = new FileInputStream(f1);
-        FileOutputStream out = new FileOutputStream(f2);
-        copyStream(in, out, null);
-    }
-
 }
