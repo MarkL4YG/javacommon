@@ -40,6 +40,10 @@ public class MarkL4YGLogger {
         logger.addHandler(errHandler);
     }
 
+    public void disableErrOut() {
+        errHandler.disable();
+    }
+
     public Logger getLogger() {
         return logger;
     }

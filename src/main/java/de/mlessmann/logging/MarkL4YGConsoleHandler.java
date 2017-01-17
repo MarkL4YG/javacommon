@@ -1,13 +1,16 @@
 package de.mlessmann.logging;
 
 import java.io.PrintStream;
-import java.util.logging.*;
+import java.util.logging.LogRecord;
+import java.util.logging.StreamHandler;
 
 /**
  * Created by Life4YourGames on 29.04.16.
  * @author Life4YourGames
  */
 public class MarkL4YGConsoleHandler extends StreamHandler {
+
+    private boolean enabled = true;
 
     /**
      * Create a new console Handler using out as OutputStream
@@ -19,7 +22,6 @@ public class MarkL4YGConsoleHandler extends StreamHandler {
 
         //Use default as default
         if (outStream == null) outStream = System.out;
-
         setOutputStream(outStream);
     }
 
@@ -29,8 +31,14 @@ public class MarkL4YGConsoleHandler extends StreamHandler {
      */
     @Override
     public void publish(LogRecord lRec) {
-        super.publish(lRec);
-        flush();
+        if (enabled) {
+            super.publish(lRec);
+            flush();
+        }
+    }
+
+    public void disable() {
+        enabled = false;
     }
 
     /**
