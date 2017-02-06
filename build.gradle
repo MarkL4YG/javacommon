@@ -1,10 +1,26 @@
-group 'de.mlessmann'
-version '2'
+import org.apache.tools.ant.filters.ReplaceTokens
 
 apply plugin: 'java'
+apply plugin: 'maven-publish'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
+
+project.ext {
+    /*
+    This will automatically publish to mavenLocal after task 'build' when enabled
+     */
+    wantAutoMavenLocalPush = true
+
+    vmajor = 2
+    vminor = 2
+    vbuild = 0
+    vadd = ""
+    id = "javacommon"
+}
+
+group 'de.mlessmann'
+version  "${project.ext.vmajor}.${project.ext.vminor}.${project.ext.vbuild}${project.ext.vadd}"
 
 repositories {
     mavenCentral()
@@ -12,4 +28,58 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+jar {
+    from sourceSets.main.output
+    archiveName "${project.ext.id}-${project.version}.jar"
+}
+
+task jarSources(type: Jar) {
+    from sourceSets.main.allSource
+    from sourceSets.main.output
+    classifier = 'src'
+    archiveName "${project.ext.id}-${project.version}-src.jar"
+}
+build.dependsOn jarSources
+
+publishing {
+    repositories {
+        mavenLocal()
+        maven {
+            url uri('build/maven2')
+        }
+    }
+    publications {
+        api(MavenPublication) {
+            groupId project.group
+            artifactId project.ext.id
+            version project.version
+
+            from components.java
+
+            artifacts = [jar]
+        }
+        sources(MavenPublication) {
+            groupId project.group
+            artifactId project.ext.id
+            version project.version
+
+            from components.java
+
+            artifacts = [jar, jarSources]
+        }
+    }
+}
+
+task triggerPublish(type: Task) {
+    println("wantAutoMavenLocal: " + project.ext.wantAutoMavenLocalPush)
+    if (project.ext.wantAutoMavenLocalPush == true) {
+        build.finalizedBy publishToMavenLocal
+    }
+}
+build << { tasks.triggerPublish }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
 }

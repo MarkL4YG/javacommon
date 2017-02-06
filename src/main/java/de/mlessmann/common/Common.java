@@ -15,7 +15,8 @@ public class Common {
     public static int negateInt(int i) { return i * (-1); }
 
     public static String stripVersion(String s) {
-        return s.replaceAll("(?!\\.)([a-zA-Z. ]*)", "");
+        s = s.replaceAll("(?!\\.)([a-zA-Z. ]*)", "");
+        return s.isEmpty() ? "0" : s;
     }
 
     /**
