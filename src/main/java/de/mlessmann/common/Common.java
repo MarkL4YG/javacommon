@@ -38,11 +38,11 @@ public class Common {
 
             int c = 0, d = 0;
 
-            if (first.length >= i) {
+            if (first.length > i) {
                 c = Integer.parseInt(first[i]);
             }
 
-            if (second.length >= i) {
+            if (second.length > i) {
                 d = Integer.parseInt(second[i]);
             }
 

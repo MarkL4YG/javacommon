@@ -14,7 +14,7 @@ project.ext {
 
     vmajor = 2
     vminor = 2
-    vbuild = 0
+    vbuild = 1
     vadd = ""
     id = "javacommon"
 }
@@ -67,7 +67,7 @@ publishing {
 
             from components.java
 
-            artifacts = [jar, jarSources]
+            artifacts = [jarSources]
         }
     }
 }
@@ -81,5 +81,5 @@ task triggerPublish(type: Task) {
 build << { tasks.triggerPublish }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.3'
+    gradleVersion = '2.13'
 }
