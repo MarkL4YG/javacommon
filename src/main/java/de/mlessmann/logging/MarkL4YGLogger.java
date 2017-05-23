@@ -24,6 +24,7 @@ public class MarkL4YGLogger {
     private MarkL4YGConsoleHandler stdHandler;
     private MarkL4YGConsoleHandler errHandler;
     private MarkL4YGLogFormatter logFormatter;
+    private Receiver r = this.new Receiver();
 
     public MarkL4YGLogger(String loggerID) {
         logger = Logger.getLogger(loggerID);
@@ -66,18 +67,57 @@ public class MarkL4YGLogger {
     }
 
     public ILogReceiver getLogReceiver() {
-        return new ILogReceiver() {
-            @Override
-            public void onMessage(Object sender, Level level, String message) {
-                logger.log(level, sender.getClass().getSimpleName() + ' ' + message);
-            }
-
-            @Override
-            public void onException(Object sender, Level level, Exception exception) {
-                logger.log(level, sender.getClass().getSimpleName() + ' ' + exception.toString());
-                exception.printStackTrace();
-            }
-        };
+        return r;
     }
 
+    public class Receiver implements ILogReceiver {
+
+        @Override
+        public void log(Object sender, Level level, Object... message) {
+            StringBuilder b = new StringBuilder();
+            if (sender instanceof String) {
+                b.append(sender);
+            } else {
+                b.append(sender.getClass().getSimpleName());
+            }
+            Throwable t = null;
+            for (Object o : message) {
+                if (o instanceof Throwable)
+                    t = ((Throwable) o);
+                else if (o instanceof String)
+                    b.append(((String) o));
+            }
+            logger.log(level, b.toString(), t);
+        }
+
+        @Override
+        public void finest(Object sender, Object... message) {
+            log(sender, Level.FINEST, message);
+        }
+
+        @Override
+        public void finer(Object sender, Object... message) {
+            log(sender, Level.FINER, message);
+        }
+
+        @Override
+        public void fine(Object sender, Object... message) {
+            log(sender, Level.FINE, message);
+        }
+
+        @Override
+        public void info(Object sender, Object... message) {
+            log(sender, Level.INFO, message);
+        }
+
+        @Override
+        public void warning(Object sender, Object... message) {
+            log(sender, Level.WARNING, message);
+        }
+
+        @Override
+        public void severe(Object sender, Object... message) {
+            log(sender, Level.SEVERE, message);
+        }
+    }
 }
