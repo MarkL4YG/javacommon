@@ -73,13 +73,8 @@ public class MarkL4YGLogger {
     public class Receiver implements ILogReceiver {
 
         @Override
-        public void log(Object sender, Level level, Object... message) {
+        public void log(Level level, Object... message) {
             StringBuilder b = new StringBuilder();
-            if (sender instanceof String) {
-                b.append(sender);
-            } else {
-                b.append(sender.getClass().getSimpleName());
-            }
             Throwable t = null;
             for (Object o : message) {
                 if (o instanceof Throwable)
@@ -91,33 +86,33 @@ public class MarkL4YGLogger {
         }
 
         @Override
-        public void finest(Object sender, Object... message) {
-            log(sender, Level.FINEST, message);
+        public void finest(Object... message) {
+            log(Level.FINEST, message);
         }
 
         @Override
-        public void finer(Object sender, Object... message) {
-            log(sender, Level.FINER, message);
+        public void finer(Object... message) {
+            log(Level.FINER, message);
         }
 
         @Override
-        public void fine(Object sender, Object... message) {
-            log(sender, Level.FINE, message);
+        public void fine(Object... message) {
+            log(Level.FINE, message);
         }
 
         @Override
-        public void info(Object sender, Object... message) {
-            log(sender, Level.INFO, message);
+        public void info(Object... message) {
+            log(Level.INFO, message);
         }
 
         @Override
-        public void warning(Object sender, Object... message) {
-            log(sender, Level.WARNING, message);
+        public void warning(Object... message) {
+            log(Level.WARNING, message);
         }
 
         @Override
-        public void severe(Object sender, Object... message) {
-            log(sender, Level.SEVERE, message);
+        public void severe(Object... message) {
+            log(Level.SEVERE, message);
         }
     }
 }

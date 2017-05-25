@@ -7,14 +7,14 @@ import java.util.logging.Level;
  */
 public interface ILogReceiver {
 
-    void finest(Object sender, Object... message);
-    void finer(Object sender, Object... message);
-    void fine(Object sender, Object... message);
-    void info(Object sender, Object... message);
-    void warning(Object sender, Object... message);
-    void severe(Object sender, Object... message);
+    void finest(Object... message);
+    void finer(Object... message);
+    void fine(Object... message);
+    void info(Object... message);
+    void warning(Object... message);
+    void severe(Object... message);
 
-    void log(Object sender, Level level, Object... message);
+    void log(Level level, Object... message);
 
     public class Dummy implements ILogReceiver {
 
@@ -23,32 +23,32 @@ public interface ILogReceiver {
         }
 
         @Override
-        public void log(Object sender, Level level, Object... message) {
+        public void log(Level level, Object... message) {
             //DoNothing
         }
 
         @Override
-        public void finest(Object sender, Object... message) {
+        public void finest(Object... message) {
         }
 
         @Override
-        public void finer(Object sender, Object... message) {
+        public void finer(Object... message) {
         }
 
         @Override
-        public void fine(Object sender, Object... message) {
+        public void fine(Object... message) {
         }
 
         @Override
-        public void info(Object sender, Object... message) {
+        public void info(Object... message) {
         }
 
         @Override
-        public void warning(Object sender, Object... message) {
+        public void warning(Object... message) {
         }
 
         @Override
-        public void severe(Object sender, Object... message) {
+        public void severe(Object... message) {
         }
     }
 }
