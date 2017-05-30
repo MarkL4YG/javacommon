@@ -1,5 +1,7 @@
 package de.mlessmann.logging;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -113,6 +115,64 @@ public class MarkL4YGLogger {
         @Override
         public void severe(Object... message) {
             log(Level.SEVERE, message);
+        }
+
+        @Override
+        public ILogReceiver getChild(String childPrefix) {
+            return new ChildReceiver(childPrefix, this);
+        }
+    }
+
+    public static class ChildReceiver implements ILogReceiver {
+
+        private ILogReceiver parent;
+        private String prefix;
+
+        public ChildReceiver(String prefix, ILogReceiver parent) {
+            this.prefix = prefix;
+            this.parent = parent;
+        }
+
+        @Override
+        public void log(Level level, Object... message) {
+            Object[] nArr = Arrays.copyOf(message, message.length +1);
+            nArr[nArr.length - 1] = prefix;
+            parent.log(level, nArr);
+        }
+
+        @Override
+        public void finest(Object... message) {
+            log(Level.FINEST, message);
+        }
+
+        @Override
+        public void finer(Object... message) {
+            log(Level.FINER, message);
+        }
+
+        @Override
+        public void fine(Object... message) {
+            log(Level.FINE, message);
+        }
+
+        @Override
+        public void info(Object... message) {
+            log(Level.INFO, message);
+        }
+
+        @Override
+        public void warning(Object... message) {
+            log(Level.WARNING, message);
+        }
+
+        @Override
+        public void severe(Object... message) {
+            log(Level.SEVERE, message);
+        }
+
+        @Override
+        public ILogReceiver getChild(String childPrefix) {
+            return new ChildReceiver(childPrefix, this);
         }
     }
 }

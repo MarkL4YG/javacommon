@@ -16,6 +16,8 @@ public interface ILogReceiver {
 
     void log(Level level, Object... message);
 
+    ILogReceiver getChild(String childPrefix);
+
     public class Dummy implements ILogReceiver {
 
         public static ILogReceiver newDummy() {
@@ -49,6 +51,11 @@ public interface ILogReceiver {
 
         @Override
         public void severe(Object... message) {
+        }
+
+        @Override
+        public ILogReceiver getChild(String childPrefix) {
+            return new MarkL4YGLogger.ChildReceiver(childPrefix, this);
         }
     }
 }
