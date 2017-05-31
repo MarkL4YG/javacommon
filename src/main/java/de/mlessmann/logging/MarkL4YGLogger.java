@@ -83,6 +83,8 @@ public class MarkL4YGLogger {
                     t = ((Throwable) o);
                 else if (o instanceof String)
                     b.append(((String) o));
+                else
+                    b.append(o.toString());
             }
             logger.log(level, b.toString(), t);
         }
