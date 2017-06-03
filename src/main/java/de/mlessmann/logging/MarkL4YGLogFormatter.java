@@ -20,35 +20,46 @@ public class MarkL4YGLogFormatter extends java.util.logging.Formatter {
      */
     public String format(LogRecord lRec) {
 
-        if (lRec.getThrown() == null) {
-            //No exception -> Standard formatting
-            StringBuilder builder = new StringBuilder();
+        //No exception -> Standard formatting
+        StringBuilder builder = new StringBuilder();
 
-            builder.append(calcDate(lRec.getMillis()));
-            builder.append(" ")
-                    .append(lRec.getLoggerName());
-            builder.append(" ")
-                    .append(lRec.getLevel());
-            builder.append(" ")
-                    .append(lRec.getMessage());
-            builder.append("\n");
-            //if (lRec.getThrown() != null) {
-            //    builder.append(lRec.getThrown().toString());
-            //}
-            if (isDebug) {
-                builder.append("--> Sent by:")
-                        .append(lRec.getSourceClassName()).append(" :: ")
-                        .append(lRec.getSourceMethodName())
-                        .append("\n");
-            }
-            return builder.toString();
+        builder.append(calcDate(lRec.getMillis()));
+        builder.append(" ")
+                .append(lRec.getLoggerName());
+        builder.append(" ")
+                .append(lRec.getLevel());
+        builder.append(" ")
+                .append(lRec.getMessage());
+        builder.append("\n");
 
-        } else {
-            //Fall back to standard error format
-            return lRec.getMessage();
-            //return super.formatMessage(lRec);
+        populateThrowable(builder, lRec.getThrown(), 10);
+
+        if (isDebug) {
+            builder.append("--> Sent by:")
+                    .append(lRec.getSourceClassName()).append(" :: ")
+                    .append(lRec.getSourceMethodName())
+                    .append("\n");
         }
+        return builder.toString();
+    }
 
+    private void populateThrowable(StringBuilder b, Throwable t, int depth) {
+        b.append("\nEXC ").append(t.getClass().getSimpleName()).append(' ').append(t.getLocalizedMessage());
+        if (depth == 0) {
+            b.append("  ...");
+            return;
+        }
+        for (StackTraceElement ste : t.getStackTrace()) {
+            b.append("\n  :").append(ste.getClassName()).append('#').append(ste.getMethodName())
+                    .append(" (").append(ste.getFileName()).append(':').append(ste.getLineNumber());
+        }
+        for (Throwable sup : t.getSuppressed()) {
+            b.append("\n  suppressed: ").append(sup.getClass().getSimpleName()).append(" -> ").append(sup.getMessage());
+        }
+        if (t.getCause() != null) {
+            b.append("\ncaused by:");
+            populateThrowable(b, t.getCause(), depth-1);
+        }
     }
 
     private String calcDate(long milliSecs) {
