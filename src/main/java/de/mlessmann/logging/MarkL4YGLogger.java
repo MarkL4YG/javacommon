@@ -138,7 +138,7 @@ public class MarkL4YGLogger {
         @Override
         public void log(Level level, Object... message) {
             Object[] nArr = Arrays.copyOf(message, message.length +1);
-            nArr[nArr.length - 1] = prefix;
+            nArr[0] = prefix;
             parent.log(level, nArr);
         }
 
