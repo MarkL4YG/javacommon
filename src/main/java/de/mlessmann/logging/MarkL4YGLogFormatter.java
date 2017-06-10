@@ -32,7 +32,8 @@ public class MarkL4YGLogFormatter extends java.util.logging.Formatter {
                 .append(lRec.getMessage());
         builder.append("\n");
 
-        populateThrowable(builder, lRec.getThrown(), 10);
+        if (lRec.getThrown() != null)
+            populateThrowable(builder, lRec.getThrown(), 10);
 
         if (isDebug) {
             builder.append("--> Sent by:")
