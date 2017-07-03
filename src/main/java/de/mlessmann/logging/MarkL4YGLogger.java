@@ -79,9 +79,8 @@ public class MarkL4YGLogger {
             StringBuilder b = new StringBuilder();
             Throwable t = null;
             for (Object o : message) {
-                b.append(' ');
                 if (o == null)
-                    b.append("null");
+                    ;
                 else if (o instanceof Throwable)
                     t = ((Throwable) o);
                 else if (o instanceof String)
@@ -140,11 +139,12 @@ public class MarkL4YGLogger {
 
         @Override
         public void log(Level level, Object... message) {
-            Object[] nArr = new Object[message.length+1];
+            Object[] nArr = new Object[message.length+2];
             for (int i = 0; i < message.length; i++) {
-                nArr[i+1] = message[i];
+                nArr[i+2] = message[i];
             }
             nArr[0] = prefix;
+            nArr[1] = ' ';
             parent.log(level, nArr);
         }
 
