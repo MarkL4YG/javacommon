@@ -3,6 +3,7 @@ package de.mlessmann.logging;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.LogRecord;
 
 /**
@@ -13,7 +14,7 @@ public class MarkL4YGLogFormatter extends java.util.logging.Formatter {
 
     public boolean isDebug = false;
     private static final Object lock = new Object();
-    private static int levelDepth = 3;
+    private static AtomicInteger levelDepth = new AtomicInteger(3);
 
     /**
      * Format a log message
@@ -30,14 +31,18 @@ public class MarkL4YGLogFormatter extends java.util.logging.Formatter {
         builder.append(" ")
                 .append(lRec.getLoggerName());
 
-        // Level
-        String level = lRec.getLevel().toString();
+        // Try to level out the log-level sections in the log
+        // Makes the log more table-like
+        String level = lRec.getLevel().getLocalizedName();
+        Integer depth = levelDepth.get();
         synchronized (lock) {
-            if (level.length() > levelDepth) {
-                levelDepth = level.length();
-            } else if (level.length() < levelDepth) {
-                char[] c = Arrays.copyOf(level.toCharArray(), levelDepth);
-                Arrays.fill(c, level.length(), levelDepth-1, ' ');
+            if (level.length() > depth) {
+                // Level caption size is bigger - adjust future indentation
+                levelDepth.set(level.length());
+            } else if (level.length() < depth) {
+                // Level caption size is smaller - fill spaces for indentation
+                char[] c = Arrays.copyOf(level.toCharArray(), depth);
+                Arrays.fill(c, level.length(), c.length-1, ' ');
                 level = new String(c);
             }
         }
