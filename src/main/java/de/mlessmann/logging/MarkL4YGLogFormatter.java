@@ -34,18 +34,18 @@ public class MarkL4YGLogFormatter extends java.util.logging.Formatter {
         // Try to level out the log-level sections in the log
         // Makes the log more table-like
         String level = lRec.getLevel().getLocalizedName();
-        Integer depth = levelDepth.get();
-        synchronized (lock) {
-            if (level.length() > depth) {
-                // Level caption size is bigger - adjust future indentation
-                levelDepth.set(level.length());
-            } else if (level.length() < depth) {
-                // Level caption size is smaller - fill spaces for indentation
-                char[] c = Arrays.copyOf(level.toCharArray(), depth);
-                Arrays.fill(c, level.length(), c.length-1, ' ');
-                level = new String(c);
-            }
+        Integer currentDepth = levelDepth.get();
+        if (currentDepth > level.length()) {
+            // We need to add spaces
+            char[] chars = level.toCharArray();
+            chars = Arrays.copyOf(chars, currentDepth);
+            Arrays.fill(chars, level.length(), chars.length, ' ');
+            level = new String(chars);
+        } else if (currentDepth < level.length()) {
+            // We need to set the depth deeper
+            levelDepth.set(level.length());
         }
+
         builder.append(" ")
                 .append(level);
         builder.append(" ")
