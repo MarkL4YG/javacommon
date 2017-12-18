@@ -21,61 +21,20 @@ public class LogWrapper {
     }
 
     private java.util.logging.Logger logger;
-    private ConsoleHandler stdHandler;
-    private ConsoleHandler errHandler;
-    private LogFormatter logFormatter;
     private Receiver r = this.new Receiver();
 
     public LogWrapper(String loggerID) {
         logger = java.util.logging.Logger.getLogger(loggerID);
         logger.setUseParentHandlers(false);
-
-        logFormatter = new LogFormatter();
-
-        stdHandler = new ConsoleHandler(System.out);
-        stdHandler.setFormatter(logFormatter);
-        errHandler = new ConsoleHandler(System.err);
-        errHandler.setFormatter(logFormatter);
-
-        logger.addHandler(stdHandler);
-        logger.addHandler(errHandler);
-    }
-
-    public void disableErrOut() {
-        errHandler.disable();
     }
 
     public java.util.logging.Logger getLogger() {
         return logger;
     }
 
-    public LogWrapper setLevel(Level level) {
-        logger.setLevel(level);
-        stdHandler.setLevel(level);
-        errHandler.setLevel(level);
-
-        if (level == Level.FINE || level == Level.FINER || level == Level.FINEST)
-            logFormatter.setDebug(true);
-        else
-            logFormatter.setDebug(false);
-        return this;
-    }
-
-    public LogWrapper setLogTrace(boolean debug) {
-        logFormatter.setDebug(debug);
-        return this;
-    }
 
     public ILogReceiver getLogReceiver() {
         return r;
-    }
-
-    public ConsoleHandler getStdHandler() {
-        return stdHandler;
-    }
-
-    public ConsoleHandler getErrHandler() {
-        return errHandler;
     }
 
     /**
@@ -86,6 +45,10 @@ public class LogWrapper {
         logger.addHandler(handler);
     }
 
+    /**
+     * Remove a handler
+     * @param handler your handler instance
+     */
     public void removeHandler(StreamHandler handler) {
         logger.removeHandler(handler);
     }

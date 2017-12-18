@@ -46,6 +46,11 @@ public class FileHandler extends StreamHandler{
             if (!logFile.renameTo(nextFile)) {
                 throw new IOException("Failed to rotate log file!");
             }
+        } else if (!logFile.exists()) {
+
+            if (!logFile.createNewFile()) {
+                throw new IOException("Couldn't create log file!");
+            }
         }
 
         setOutputStream(new FileOutputStream(logFile));
