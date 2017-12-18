@@ -14,7 +14,7 @@ project.ext {
 
     vmajor = 2
     vminor = 4
-    vbuild = 1
+    vbuild = 3
     vadd = ""
     id = "javacommon"
 }

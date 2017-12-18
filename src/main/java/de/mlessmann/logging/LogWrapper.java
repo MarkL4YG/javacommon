@@ -2,6 +2,7 @@ package de.mlessmann.logging;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.StreamHandler;
 
@@ -24,8 +25,18 @@ public class LogWrapper {
     private Receiver r = this.new Receiver();
 
     public LogWrapper(String loggerID) {
+        this(loggerID, false);
+    }
+
+    public LogWrapper(String loggerID, boolean removeHandlers) {
         logger = java.util.logging.Logger.getLogger(loggerID);
         logger.setUseParentHandlers(false);
+        if (removeHandlers) {
+            Handler[] handlers = logger.getHandlers();
+            for (int i = handlers.length - 1; i >= 0; i--) {
+                logger.removeHandler(handlers[i]);
+            }
+        }
     }
 
     public java.util.logging.Logger getLogger() {

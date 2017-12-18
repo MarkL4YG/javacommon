@@ -8,7 +8,7 @@ import java.util.logging.StreamHandler;
 /**
  * Created by MarkL4YG on 18-Dec-17
  */
-public class FileHandler extends StreamHandler{
+public class FileHandler extends StreamHandler {
 
     private boolean enabled = false;
     private boolean autoRotate = true;
@@ -20,10 +20,11 @@ public class FileHandler extends StreamHandler{
      */
     public FileHandler(File logFile, boolean autoRotate) {
         super();
-        setOutputStream(System.out);
 
         //Set default
         if (logFile == null) logFile = new File("log.txt");
+        this.logFile = logFile;
+        this.autoRotate = autoRotate;
     }
 
     /**
@@ -40,7 +41,7 @@ public class FileHandler extends StreamHandler{
             File nextFile = null;
             int i = 0;
             do {
-                nextFile = new File(fileName + '.' + i);
+                nextFile = new File(logFile.getAbsoluteFile().getParentFile(), fileName + '.' + i);
             } while (nextFile.exists());
 
             if (!logFile.renameTo(nextFile)) {
