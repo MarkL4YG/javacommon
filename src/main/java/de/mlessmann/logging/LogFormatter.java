@@ -10,7 +10,7 @@ import java.util.logging.LogRecord;
  * Created by Life4YourGames on 29.04.16.
  * @author Life4YourGames
  */
-public class MarkL4YGLogFormatter extends java.util.logging.Formatter {
+public class LogFormatter extends java.util.logging.Formatter {
 
     public boolean isDebug = false;
     private static final Object lock = new Object();
@@ -98,7 +98,7 @@ public class MarkL4YGLogFormatter extends java.util.logging.Formatter {
      * @param b Whether or not debugging help is enabled
      * @return this
      */
-    public MarkL4YGLogFormatter setDebug(boolean b){
+    public LogFormatter setDebug(boolean b){
         isDebug = b;
         return this;
     }

@@ -13,8 +13,8 @@ project.ext {
     wantAutoMavenLocalPush = true
 
     vmajor = 2
-    vminor = 3
-    vbuild = 8
+    vminor = 4
+    vbuild = 0
     vadd = ""
     id = "javacommon"
 }

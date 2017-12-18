@@ -1,42 +1,40 @@
 package de.mlessmann.logging;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.StreamHandler;
 
 /**
  * Created by Life4YourGames on 13.09.16.
  */
-public class MarkL4YGLogger {
+public class LogWrapper {
 
-    private static Map<String, MarkL4YGLogger> loggerMap = new HashMap<String, MarkL4YGLogger>();
+    private static Map<String, LogWrapper> loggerMap = new HashMap<String, LogWrapper>();
 
-    public synchronized static MarkL4YGLogger get(String loggerID) {
+    public synchronized static LogWrapper get(String loggerID) {
         if (!loggerMap.containsKey(loggerID)) {
-            loggerMap.put(loggerID, new MarkL4YGLogger(loggerID));
+            loggerMap.put(loggerID, new LogWrapper(loggerID));
             return get(loggerID);
         }
         return loggerMap.get(loggerID);
     }
 
-    private Logger logger;
-    private MarkL4YGConsoleHandler stdHandler;
-    private MarkL4YGConsoleHandler errHandler;
-    private MarkL4YGLogFormatter logFormatter;
+    private java.util.logging.Logger logger;
+    private ConsoleHandler stdHandler;
+    private ConsoleHandler errHandler;
+    private LogFormatter logFormatter;
     private Receiver r = this.new Receiver();
 
-    public MarkL4YGLogger(String loggerID) {
-        logger = Logger.getLogger(loggerID);
+    public LogWrapper(String loggerID) {
+        logger = java.util.logging.Logger.getLogger(loggerID);
         logger.setUseParentHandlers(false);
 
-        logFormatter = new MarkL4YGLogFormatter();
+        logFormatter = new LogFormatter();
 
-        stdHandler = new MarkL4YGConsoleHandler(System.out);
+        stdHandler = new ConsoleHandler(System.out);
         stdHandler.setFormatter(logFormatter);
-        errHandler = new MarkL4YGConsoleHandler(System.err);
+        errHandler = new ConsoleHandler(System.err);
         errHandler.setFormatter(logFormatter);
 
         logger.addHandler(stdHandler);
@@ -47,11 +45,11 @@ public class MarkL4YGLogger {
         errHandler.disable();
     }
 
-    public Logger getLogger() {
+    public java.util.logging.Logger getLogger() {
         return logger;
     }
 
-    public MarkL4YGLogger setLevel(Level level) {
+    public LogWrapper setLevel(Level level) {
         logger.setLevel(level);
         stdHandler.setLevel(level);
         errHandler.setLevel(level);
@@ -63,13 +61,33 @@ public class MarkL4YGLogger {
         return this;
     }
 
-    public MarkL4YGLogger setLogTrace(boolean debug) {
+    public LogWrapper setLogTrace(boolean debug) {
         logFormatter.setDebug(debug);
         return this;
     }
 
     public ILogReceiver getLogReceiver() {
         return r;
+    }
+
+    public ConsoleHandler getStdHandler() {
+        return stdHandler;
+    }
+
+    public ConsoleHandler getErrHandler() {
+        return errHandler;
+    }
+
+    /**
+     * Add a handler
+     * @param handler for example a {@link FileHandler}
+     */
+    public void addHandler(StreamHandler handler) {
+        logger.addHandler(handler);
+    }
+
+    public void removeHandler(StreamHandler handler) {
+        logger.removeHandler(handler);
     }
 
     public class Receiver implements ILogReceiver {

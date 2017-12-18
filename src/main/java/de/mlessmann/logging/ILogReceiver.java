@@ -55,7 +55,7 @@ public interface ILogReceiver {
 
         @Override
         public ILogReceiver getChild(String childPrefix) {
-            return new MarkL4YGLogger.ChildReceiver(childPrefix, this);
+            return new LogWrapper.ChildReceiver(childPrefix, this);
         }
     }
 }

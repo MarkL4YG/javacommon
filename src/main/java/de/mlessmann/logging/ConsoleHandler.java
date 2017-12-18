@@ -8,7 +8,7 @@ import java.util.logging.StreamHandler;
  * Created by Life4YourGames on 29.04.16.
  * @author Life4YourGames
  */
-public class MarkL4YGConsoleHandler extends StreamHandler {
+public class ConsoleHandler extends StreamHandler {
 
     private boolean enabled = true;
 
@@ -16,7 +16,7 @@ public class MarkL4YGConsoleHandler extends StreamHandler {
      * Create a new console Handler using out as OutputStream
      * @param outStream The outputStream that should be used
      */
-    public MarkL4YGConsoleHandler(PrintStream outStream) {
+    public ConsoleHandler(PrintStream outStream) {
 
         super();
 
@@ -47,7 +47,9 @@ public class MarkL4YGConsoleHandler extends StreamHandler {
      */
     @Override
     public void close() {
-        flush();
+        if (enabled) {
+            flush();
+        }
     }
 
 }
